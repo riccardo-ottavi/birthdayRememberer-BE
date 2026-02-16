@@ -25,5 +25,18 @@ function store(req, res) {
     res.status(201).json(newPerson);
 }
 
+// DELETE
+function deleteItem(req, res) {
+    const { id } = req.params;
+    const index = people.findIndex(p => p.id === parseInt(id));
 
-module.exports = { index, store }
+    if (index === -1) {
+        return res.status(404).json({ error: "Persona non trovata" });
+    }
+
+    const deletedPerson = people.splice(index, 1)[0]; 
+    res.json({ message: "Persona eliminata", deletedPerson });
+}
+
+
+module.exports = { index, store, deleteItem }
