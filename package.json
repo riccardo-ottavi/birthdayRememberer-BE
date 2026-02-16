@@ -1,0 +1,18 @@
+{
+  "name": "birthdayrememberer-be",
+  "version": "1.0.0",
+  "description": "personal project",
+  "license": "ISC",
+  "author": "Riccardo Ottavi",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "watch": "node --watch app.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {}
+}
