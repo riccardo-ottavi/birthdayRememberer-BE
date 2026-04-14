@@ -1,21 +1,15 @@
 const Birthday = require("../models/Birthday");
 
-
-//  INDEX
 async function index(req, res) {
     try {
-        const people = await Birthday.find();
+        const people = await Birthday.find({ userId: req.userId });
         res.json(people);
     } catch (err) {
         res.status(500).json({ error: "Errore nel recupero dati" });
     }
 }
 
-// STORE
 async function store(req, res) {
-    console.log("HEADERS:", req.headers);
-    console.log("BODY:", req.body);
-
     const { firstName, lastName, birthDate } = req.body;
 
     if (!firstName || !lastName || !birthDate) {
@@ -26,7 +20,8 @@ async function store(req, res) {
         const newPerson = new Birthday({
             firstName,
             lastName,
-            birthDate
+            birthDate,
+            userId: req.userId 
         });
 
         await newPerson.save();
@@ -38,12 +33,14 @@ async function store(req, res) {
     }
 }
 
-// DELETE
 async function deleteItem(req, res) {
     const { id } = req.params;
 
     try {
-        const deletedPerson = await Birthday.findByIdAndDelete(id);
+        const deletedPerson = await Birthday.findOneAndDelete({
+            _id: id,
+            userId: req.userId 
+        });
 
         if (!deletedPerson) {
             return res.status(404).json({ error: "Persona non trovata" });
@@ -55,5 +52,4 @@ async function deleteItem(req, res) {
     }
 }
 
-
-module.exports = { index, store, deleteItem }
+module.exports = { index, store, deleteItem };
