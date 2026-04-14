@@ -1,41 +1,58 @@
-const { people } = require("../data/people");  
+const Birthday = require("../models/Birthday");
+
 
 //  INDEX
-function index(req, res) {
-    res.json(people);
-};
+async function index(req, res) {
+    try {
+        const people = await Birthday.find();
+        res.json(people);
+    } catch (err) {
+        res.status(500).json({ error: "Errore nel recupero dati" });
+    }
+}
 
 // STORE
-function store(req, res) {
+async function store(req, res) {
+    console.log("HEADERS:", req.headers);
+    console.log("BODY:", req.body);
+
     const { firstName, lastName, birthDate } = req.body;
 
     if (!firstName || !lastName || !birthDate) {
         return res.status(400).json({ error: "Tutti i campi sono obbligatori" });
     }
 
-    const newPerson = {
-        id: people.length ? people[people.length - 1].id + 1 : 1,
-        firstName,
-        lastName,
-        birthDate
-    };
+    try {
+        const newPerson = new Birthday({
+            firstName,
+            lastName,
+            birthDate
+        });
 
-    people.push(newPerson);
+        await newPerson.save();
 
-    res.status(201).json(newPerson);
+        res.status(201).json(newPerson);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Errore nel salvataggio" });
+    }
 }
 
 // DELETE
-function deleteItem(req, res) {
+async function deleteItem(req, res) {
     const { id } = req.params;
-    const index = people.findIndex(p => p.id === parseInt(id));
 
-    if (index === -1) {
-        return res.status(404).json({ error: "Persona non trovata" });
+    try {
+        const deletedPerson = await Birthday.findByIdAndDelete(id);
+
+        if (!deletedPerson) {
+            return res.status(404).json({ error: "Persona non trovata" });
+        }
+
+        res.json({ message: "Persona eliminata", deletedPerson });
+    } catch (err) {
+        res.status(500).json({ error: "Errore nella cancellazione" });
     }
-
-    const deletedPerson = people.splice(index, 1)[0]; 
-    res.json({ message: "Persona eliminata", deletedPerson });
 }
 
 

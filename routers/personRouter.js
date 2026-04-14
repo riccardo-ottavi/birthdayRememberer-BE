@@ -1,4 +1,6 @@
 const express = require("express");
+require("../models/User");
+require("../models/Birthday");
 
 const personController = require('../controllers/personController');
 const validatePerson = require("../middlewares/validatePerson");
