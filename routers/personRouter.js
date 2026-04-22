@@ -17,5 +17,8 @@ router.post('/', authMiddleware, validatePerson, personController.store)
 // delete
 router.delete('/:id', authMiddleware, personController.deleteItem)
 
+//update
+router.put("/:id", authMiddleware, personController.update);
+
 
 module.exports = router;

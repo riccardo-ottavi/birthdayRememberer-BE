@@ -33,6 +33,32 @@ async function store(req, res) {
     }
 }
 
+async function update(req, res) {
+    const { id } = req.params;
+    const { firstName, lastName, birthDate } = req.body;
+
+    if (!firstName || !lastName || !birthDate) {
+        return res.status(400).json({ error: "Tutti i campi sono obbligatori" });
+    }
+
+    try {
+        const updatedPerson = await Birthday.findOneAndUpdate(
+            { _id: id, userId: req.userId },
+            { firstName, lastName, birthDate },
+            { new: true }
+        );
+
+        if (!updatedPerson) {
+            return res.status(404).json({ error: "Persona non trovata" });
+        }
+
+        res.json(updatedPerson);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Errore aggiornamento" });
+    }
+}
+
 async function deleteItem(req, res) {
     const { id } = req.params;
 
@@ -52,4 +78,4 @@ async function deleteItem(req, res) {
     }
 }
 
-module.exports = { index, store, deleteItem };
+module.exports = { index, store, deleteItem, update };
