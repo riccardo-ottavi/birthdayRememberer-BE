@@ -23,9 +23,8 @@ app.use(globalLimiter);
 
 
 const allowedOrigins = [
-  "https://birthday-rememberer-kcd9djw8f-riccardo-ottavis-projects.vercel.app",
-  "https://birthday-rememberer-ju4gyqdpc-riccardo-ottavis-projects.vercel.app",
-  "http://localhost:5173"
+  "http://localhost:5173",
+  "https://birthday-rememberer-j1q8g436y-riccardo-ottavis-projects.vercel.app"
 ];
 
 app.use(cors({
