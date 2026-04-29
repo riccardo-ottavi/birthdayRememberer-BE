@@ -3,13 +3,14 @@ require("./data/db");
 
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
 const authRouter = require("./routers/authRoutes");
 const personRouter = require("./routers/personRouter");
 
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 10000;
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -27,7 +28,7 @@ app.use(cors({
 }));
 
 app.use(express.json({ limit: "10kb" })); 
-
+app.use(helmet());
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -42,6 +43,6 @@ app.get("/", (req, res) => {
   res.send("<h1>Api birthdaysRememberer Homepage</h1>");
 });
 
-app.listen(port, () => {
-  console.log(`People birthday app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`People birthday app listening on port ${PORT}`);
 });
