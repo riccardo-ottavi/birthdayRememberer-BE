@@ -22,8 +22,20 @@ const globalLimiter = rateLimit({
 app.use(globalLimiter);
 
 
+const allowedOrigins = [
+  "https://birthday-rememberer-kcd9djw8f-riccardo-ottavis-projects.vercel.app",
+  "https://birthday-rememberer-ju4gyqdpc-riccardo-ottavis-projects.vercel.app",
+  "http://localhost:5173"
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
