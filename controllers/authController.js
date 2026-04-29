@@ -55,7 +55,11 @@ async function login(req, res) {
   const cleanEmail = email.trim().toLowerCase();
 
   try {
+    console.log("EMAIL:", cleanEmail); 
+
     const user = await User.findOne({ email: cleanEmail });
+
+    console.log("USER:", user);  
 
     if (!user) {
       return res.status(401).json({ error: "Credenziali non valide" });
@@ -76,8 +80,9 @@ async function login(req, res) {
     return res.json({ token });
 
   } catch (err) {
-    return res.status(500).json({ error: "Errore login" });
-  }
+  console.error("LOGIN ERROR:", err);
+  return res.status(500).json({ error: "Errore login" });
+}
 }
 
 module.exports = { register, login };
